@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "122988240473",
+    "project_id": "mobile-apps-go-fish",
+    "storage_bucket": "mobile-apps-go-fish.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122988240473:android:4ae97e83d3335261851b48",
+        "android_client_info": {
+          "package_name": "com.colinmcbride.go_fish_game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122988240473-mhdfc8gap7qaao27vf2a3uruls6dno54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANI0A8qMuxD1Bn35hGZhddOOYq7COiUZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122988240473-mhdfc8gap7qaao27vf2a3uruls6dno54.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "122988240473-f6v7ohkcljbd81p2k3dien8bv3c713i1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.colinmcbride.goFishGame.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
