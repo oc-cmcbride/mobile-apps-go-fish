@@ -44,10 +44,19 @@ class PlayingArea {
   }
 
   /// Removes the first card in the area, if any.
-  void removeFirstCard() {
-    if (cards.isEmpty) return;
-    cards.removeAt(0);
+  PlayingCard? removeFirstCard() {
+    if (cards.isEmpty) return null;
+    PlayingCard removedCard = cards.removeAt(0);
     _playerChanges.add(null);
+    return removedCard;
+  }
+
+  /// Removes the last card in the area, if any.
+  PlayingCard? removeLastCard() {
+    if (cards.isEmpty) return null;
+    PlayingCard removedCard = cards.removeLast();
+    _playerChanges.add(null);
+    return removedCard;
   }
 
   /// Replaces the cards in the area with [cards].

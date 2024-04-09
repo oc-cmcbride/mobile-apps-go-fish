@@ -5,38 +5,49 @@ import 'package:provider/provider.dart';
 
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
+import '../game_internals/board_state.dart';
 import '../game_internals/playing_area.dart';
 import '../game_internals/playing_card.dart';
 import '../style/palette.dart';
 import 'playing_card_widget.dart';
 
-class PlayingAreaWidget extends StatefulWidget {
+class DeckAreaWidget extends StatefulWidget {
   final PlayingArea area;
 
-  const PlayingAreaWidget(this.area, {super.key});
+  final int deckStart = PlayingArea.maxCards;
+
+  const DeckAreaWidget(this.area, {super.key});
 
   @override
-  State<PlayingAreaWidget> createState() => _PlayingAreaWidgetState();
+  State<DeckAreaWidget> createState() => _DeckAreaWidgetState();
 }
 
-class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
+class _DeckAreaWidgetState extends State<DeckAreaWidget> {
   bool isHighlighted = false;
+
+  BoardState? boardState;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
 
+    boardState = context.watch<BoardState>();
+
+    for (int i = 0; i < widget.deckStart; i++) {
+      widget.area.acceptCard(PlayingCard.random());
+    }
+
     return LimitedBox(
       maxHeight: 150,
       child: AspectRatio(
-        aspectRatio: 2 / 1,
+        aspectRatio: 1 / 1,
         child: DragTarget<PlayingCardDragData>(
           builder: (context, candidateData, rejectedData) => Material(
-            color: isHighlighted ? palette.accept : palette.trueWhite,
+            color: isHighlighted ? palette.redPen : palette.backgroundMain,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             clipBehavior: Clip.hardEdge,
             child: InkWell(
-              splashColor: palette.redPen,
+              splashColor: palette.accept,
               onTap: _onAreaTap,
               child: StreamBuilder(
                 // Rebuild the card stack whenever the area changes
@@ -46,16 +57,16 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
               ),
             ),
           ),
-          onWillAcceptWithDetails: _onDragWillAccept,
-          onLeave: _onDragLeave,
-          onAcceptWithDetails: _onDragAccept,
         ),
       ),
     );
   }
 
   void _onAreaTap() {
-    widget.area.removeFirstCard();
+    PlayingCard? drawnCard = widget.area.removeLastCard();
+    if (drawnCard != null) {
+      boardState?.player.addCard(drawnCard);
+    }
 
     final audioController = context.read<AudioController>();
     audioController.playSfx(SfxType.huhsh);
@@ -73,16 +84,16 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
 
   bool _onDragWillAccept(DragTargetDetails<PlayingCardDragData> details) {
     setState(() => isHighlighted = true);
-    return true;
+    return false;
   }
 }
 
 class _CardStack extends StatelessWidget {
-  static const int _maxCards = 2;
+  static const int _maxCards = 1;
 
-  static const _leftOffset = 10.0;
+  static const _leftOffset = 0.0;
 
-  static const _topOffset = 5.0;
+  static const _topOffset = 0.0;
 
   static const double _maxWidth =
       _maxCards * _leftOffset + PlayingCardWidget.width;

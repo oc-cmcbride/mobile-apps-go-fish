@@ -14,18 +14,21 @@ class BoardState {
 
   final PlayingArea areaTwo = PlayingArea();
 
+  final PlayingArea areaDeck = PlayingArea();
+
   final Player player = Player();
 
   BoardState({required this.onWin}) {
     player.addListener(_handlePlayerChange);
   }
 
-  List<PlayingArea> get areas => [areaOne, areaTwo];
+  List<PlayingArea> get areas => [areaOne, areaTwo, areaDeck];
 
   void dispose() {
     player.removeListener(_handlePlayerChange);
-    areaOne.dispose();
-    areaTwo.dispose();
+    for (var a in areas) {
+      a.dispose();
+    }
   }
 
   void _handlePlayerChange() {
