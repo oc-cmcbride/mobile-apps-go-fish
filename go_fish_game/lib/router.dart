@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'game_internals/score.dart';
+import 'login_page/landing_login.dart';
 import 'main_menu/main_menu_screen.dart';
 import 'play_session/play_session_screen.dart';
 import 'settings/settings_screen.dart';
@@ -64,6 +65,11 @@ final router = GoRouter(
           path: 'settings',
           builder: (context, state) =>
               const SettingsScreen(key: Key('settings')),
+        ),
+        GoRoute(
+          path: 'login_page',
+          builder: (context, state) =>
+              const LandingLogin(key: Key('login')),
         ),
       ],
     ),
