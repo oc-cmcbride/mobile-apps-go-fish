@@ -16,7 +16,7 @@ class DeckAreaWidget extends StatefulWidget {
 
   final int deckStart = PlayingArea.maxCards;
 
-  const DeckAreaWidget(this.area, {super.key});
+  DeckAreaWidget(this.area, {super.key});
 
   @override
   State<DeckAreaWidget> createState() => _DeckAreaWidgetState();
@@ -33,12 +33,8 @@ class _DeckAreaWidgetState extends State<DeckAreaWidget> {
 
     boardState = context.watch<BoardState>();
 
-    for (int i = 0; i < widget.deckStart; i++) {
-      widget.area.acceptCard(PlayingCard.random());
-    }
-
     return LimitedBox(
-      maxHeight: 150,
+      maxHeight: 120,
       child: AspectRatio(
         aspectRatio: 1 / 1,
         child: DragTarget<PlayingCardDragData>(
@@ -65,7 +61,7 @@ class _DeckAreaWidgetState extends State<DeckAreaWidget> {
   void _onAreaTap() {
     PlayingCard? drawnCard = widget.area.removeLastCard();
     if (drawnCard != null) {
-      boardState?.player.addCard(drawnCard);
+      boardState?.currentPlayer.addCard(drawnCard);
     }
 
     final audioController = context.read<AudioController>();

@@ -18,15 +18,15 @@ class PlayerHandWidget extends StatelessWidget {
         child: ListenableBuilder(
           // Make sure we rebuild every time there's an update
           // to the player's hand.
-          listenable: boardState.player,
+          listenable: boardState.currentPlayer,
           builder: (context, child) {
             return Wrap(
               alignment: WrapAlignment.center,
               spacing: 10,
               runSpacing: 10,
               children: [
-                ...boardState.player.hand.map((card) =>
-                    PlayingCardWidget(card, player: boardState.player)),
+                ...boardState.currentPlayer.hand.map((card) =>
+                    PlayingCardWidget(card, player: boardState.currentPlayer)),
               ],
             );
           },
