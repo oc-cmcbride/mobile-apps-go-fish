@@ -5,16 +5,22 @@ import 'playing_card.dart';
 class Player extends ChangeNotifier {
   static const maxCards = 5;
 
-  final List<PlayingCard> hand =
-      List.generate(maxCards, (index) => PlayingCard.random());
-  
+  // Technically this implementation doesn't allow for multiple cards of the 
+  // same type, but that's not really a concern for us *shrug*
+  final Map<PlayingCard, bool> selectedCards = {
+    for (var card in List.generate(maxCards, (int i) => PlayingCard.random()))
+      card: false
+  };
+
+  List<PlayingCard> get hand => selectedCards.keys.toList();
+
   void addCard(PlayingCard card) {
-    hand.add(card);
+    selectedCards.addAll({card: false});
     notifyListeners();
   }
 
   void removeCard(PlayingCard card) {
-    hand.remove(card);
+    selectedCards.remove(card);
     notifyListeners();
   }
 }
