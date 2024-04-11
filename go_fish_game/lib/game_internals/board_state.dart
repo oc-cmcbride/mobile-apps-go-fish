@@ -24,7 +24,6 @@ class BoardState {
   late List<Player> players;
 
   BoardState({required this.onWin}) {
-    print("New board state!");
     players = [playerOne, playerTwo];
     for (Player p in players) {
       p.addListener(_handlePlayerChange);

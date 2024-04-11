@@ -43,9 +43,13 @@ class PlayingCardWidget extends StatelessWidget {
       ),
     );
 
+    return cardWidget;
+
+    /*
     /// Cards that aren't in a player's hand are not draggable.
     if (player == null) return cardWidget;
 
+    
     return Draggable(
       feedback: Transform.rotate(
         angle: 0.1,
@@ -66,6 +70,7 @@ class PlayingCardWidget extends StatelessWidget {
       },
       child: cardWidget,
     );
+    */
   }
 }
 
