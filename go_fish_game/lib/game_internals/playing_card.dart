@@ -9,6 +9,8 @@ import 'card_value.dart';
 class PlayingCard {
   static final _random = Random();
 
+  static final List<PlayingCard> _randomCards = [];
+
   final CardSuit suit;
 
   final CardValue value;
@@ -26,10 +28,11 @@ class PlayingCard {
 
   factory PlayingCard.random([Random? random]) {
     random ??= _random;
-    return PlayingCard(
-      CardSuit.values[random.nextInt(CardSuit.values.length)],
-      CardValue.values[random.nextInt(CardValue.values.length)],
-    );
+    if (_randomCards.isEmpty) {
+      // List is empty; generate new set of random cards 
+      _randomCards.addAll(List.generate(52, (int index) => PlayingCard(CardSuit.values[index % 4], CardValue.values[index % 13]))..shuffle(random));
+    }
+    return _randomCards.removeAt(0);
   }
 
   @override
