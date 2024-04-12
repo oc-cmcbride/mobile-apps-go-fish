@@ -3,14 +3,17 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 import 'card_suit.dart';
+import 'card_value.dart';
 
 @immutable
 class PlayingCard {
   static final _random = Random();
 
+  static late final List<PlayingCard> _deckOrder;
+
   final CardSuit suit;
 
-  final int value;
+  final CardValue value;
 
   const PlayingCard(this.suit, this.value);
 
@@ -18,7 +21,8 @@ class PlayingCard {
     return PlayingCard(
       CardSuit.values
           .singleWhere((e) => e.internalRepresentation == json['suit']),
-      json['value'] as int,
+      CardValue.values
+          .singleWhere((e) => e.internalRepresentation == json['value']),
     );
   }
 
@@ -26,7 +30,7 @@ class PlayingCard {
     random ??= _random;
     return PlayingCard(
       CardSuit.values[random.nextInt(CardSuit.values.length)],
-      2 + random.nextInt(9),
+      CardValue.values[random.nextInt(CardValue.values.length)],
     );
   }
 
@@ -40,7 +44,7 @@ class PlayingCard {
 
   Map<String, dynamic> toJson() => {
         'suit': suit.internalRepresentation,
-        'value': value,
+        'value': value.internalRepresentation,
       };
 
   @override
