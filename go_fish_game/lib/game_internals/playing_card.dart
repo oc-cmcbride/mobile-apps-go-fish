@@ -9,8 +9,6 @@ import 'card_value.dart';
 class PlayingCard {
   static final _random = Random();
 
-  static late final List<PlayingCard> _deckOrder;
-
   final CardSuit suit;
 
   final CardValue value;

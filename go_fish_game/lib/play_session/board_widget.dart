@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:go_fish_game/game_internals/playing_area.dart';
 import 'package:go_fish_game/play_session/deck_area_widget.dart';
 import 'package:provider/provider.dart';
 

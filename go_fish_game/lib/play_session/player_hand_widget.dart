@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../style/palette.dart';
-import '../game_internals/playing_card.dart';
 import '../game_internals/board_state.dart';
 import 'playing_card_widget.dart';
 
@@ -43,7 +42,7 @@ class _PlayerHandWidgetState extends State<PlayerHandWidget> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: (boardState.currentPlayer.selectedCards[card] ?? false) ? Colors.green : Colors.white,
+                      backgroundColor: (boardState.currentPlayer.selectedCards[card] ?? false) ? palette.accept : palette.trueWhite,
                       ),
                     child: PlayingCardWidget(
                       card,
