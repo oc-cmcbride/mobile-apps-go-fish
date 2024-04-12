@@ -7,6 +7,7 @@ import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../game_internals/playing_area.dart';
 import '../game_internals/playing_card.dart';
+import '../game_internals/board_state.dart';
 import '../style/palette.dart';
 import 'playing_card_widget.dart';
 
@@ -20,11 +21,15 @@ class PlayingAreaWidget extends StatefulWidget {
 }
 
 class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
+
   bool isHighlighted = false;
+
+  BoardState? boardState;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
+    boardState = context.watch<BoardState>();
 
     return LimitedBox(
       maxHeight: 120,
@@ -55,10 +60,22 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   }
 
   void _onAreaTap() {
-    widget.area.removeFirstCard();
+    if (boardState != null) {
+      final selectedCards = boardState!.currentPlayer.selectedCards;
+      if (selectedCards.containsValue(true)) {
+        // Cards are selected; move them to the play area 
+        final removedCards = Map<PlayingCard, bool>.fromEntries(selectedCards.entries.where((element) => element.value));
+        removedCards.keys.forEach(widget.area.acceptCard);
+        boardState!.currentPlayer.removeCards(removedCards.keys);
+      }
+      else {
+        // No cards are selected; discard cards from the area
+        widget.area.removeFirstCard();
+      }
 
-    final audioController = context.read<AudioController>();
-    audioController.playSfx(SfxType.huhsh);
+      final audioController = context.read<AudioController>();
+      audioController.playSfx(SfxType.huhsh);
+    }
   }
 
   void _onDragAccept(DragTargetDetails<PlayingCardDragData> details) {

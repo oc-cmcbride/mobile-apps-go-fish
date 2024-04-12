@@ -19,8 +19,18 @@ class Player extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addCards(Iterable<PlayingCard> cards) {
+    cards.forEach(addCard);
+  }
+
   void removeCard(PlayingCard card) {
     selectedCards.remove(card);
     notifyListeners();
+  }
+
+  void removeCards(Iterable<PlayingCard> cards) {
+    // List<PlayingCard> removedCards = List.from(cards);
+    // removedCards.forEach(removeCard);
+    cards.forEach(removeCard);
   }
 }
