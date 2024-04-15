@@ -1,97 +1,69 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_fish_game/utils/constants.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
+import 'package:go_fish_game/accounts/create_account_page.dart';
+import 'package:go_fish_game/login_page/sign_in_page.dart';
+import 'package:go_fish_game/main_menu/main_menu_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LandingLogin extends StatelessWidget {
-  const LandingLogin({super.key});
+  const LandingLogin({Key? key});
+
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      //need to handle signing in and directing the user to the main application
+      if (googleUser != null) {
+        // TODO: Perform additional authentication steps or handle the signed-in user.
+        // For example, you can pass the user data to another page and display user information.
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MainMenuScreen()),
+        );
+      } else {
+        // User canceled the Google sign-in flow.
+        // You can show an error message or perform any desired action.
+      }
+    } catch (error) {
+      // Handle sign-in errors.
+      // You can show an error message or perform any desired action.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    User? result = FirebaseAuth.instance.currentUser;
     return Scaffold(
-        backgroundColor: Constants.kPrimaryColor,
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: Constants.statusBarColor,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/main-img.png"),
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(children: <TextSpan>[
-                      TextSpan(
-                          text: Constants.textIntro,
-                          style: TextStyle(
-                            color: Constants.kBlackColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30.0,
-                          )),
-                      TextSpan(
-                          text: Constants.textIntroDesc1,
-                          style: TextStyle(
-                              color: Constants.kDarkBlueColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0)),
-                      TextSpan(
-                          text: Constants.textIntroDesc2,
-                          style: TextStyle(
-                              color: Constants.kBlackColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0)),
-                    ])),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  Constants.textSmallSignUp,
-                  style: TextStyle(color: Constants.kDarkGreyColor),
-                ),
-                SizedBox(height: size.height * 0.1),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      result == null
-                          ? Navigator.pushNamed(
-                              context, Constants.signInNavigate)
-                          : Navigator.pushReplacementNamed(
-                              context, Constants.homeNavigate);
-                    },
-                    child: Text(Constants.textStart),
-                    style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            Constants.kPrimaryColor),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Constants.kBlackColor),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide.none)),
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      Constants.textSignIn,
-                      style: TextStyle(color: Constants.kBlackColor),
-                    ),
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Constants.kGreyColor),
-                        side: MaterialStateProperty.all<BorderSide>(
-                            BorderSide.none)),
-                  ),
-                )
-              ],
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: () => _handleGoogleSignIn(context),
+              child: const Text('Sign In with Google'),
             ),
-          ),
-        ));
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+                );
+              },
+              child: const Text('Create Account'),
+            ),
+            //might change this to have the two fields here
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignInPage()),
+                );
+              },
+              child: const Text('Sign In'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

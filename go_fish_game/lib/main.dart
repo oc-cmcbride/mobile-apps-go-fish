@@ -19,8 +19,6 @@ import 'style/palette.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
-
 void main() async {
   // Basic logging setup.
   Logger.root.level = kDebugMode ? Level.FINE : Level.INFO;
@@ -43,6 +41,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  // ignore: prefer_const_constructors
   runApp(MyApp());
 }
 
@@ -94,7 +93,7 @@ class MyApp extends StatelessWidget {
               // Make buttons more fun.
               filledButtonTheme: FilledButtonThemeData(
                 style: FilledButton.styleFrom(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),

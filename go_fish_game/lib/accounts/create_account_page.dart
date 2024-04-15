@@ -2,25 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:go_fish_game/controllers/auth_controller.dart';
 import 'package:go_fish_game/utils/string_validator.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInAccountPageState();
+  State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
 
-class _SignInAccountPageState extends State<SignInPage> {
-    final _formKey = GlobalKey<FormState>();
+class _CreateAccountPageState extends State<CreateAccountPage> {
+  final _formKey = GlobalKey<FormState>();
 
-    final _emailController = TextEditingController();
-    final _pwController = TextEditingController();
-    String _errorMessage = '';
-
+  final _emailController = TextEditingController();
+  final _pwController = TextEditingController();
+  String _errorMessage = '';
+  
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
+      appBar: AppBar(title: const Text('Create Account')),
       body: Form(
         key: _formKey,
         child: Column(
@@ -39,14 +38,11 @@ class _SignInAccountPageState extends State<SignInPage> {
               decoration: const InputDecoration(labelText: 'Password'),
             ),
             ElevatedButton(
-              child: const Text('Sign In'),
+              child: const Text('Create Account'),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  var result = AuthController().signIn(
-                      email: _emailController.text,
-                      password: _pwController.text);
+                  var result = AuthController().createAccount(email: _emailController.text, password: _pwController.text);
                   result.then((value) {
-                    //value returns an error message and null if all is gucci
                     if (value == null){
                       Navigator.of(context).pop();
                     }
@@ -64,5 +60,12 @@ class _SignInAccountPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _pwController.dispose();
+    super.dispose();
   }
 }
