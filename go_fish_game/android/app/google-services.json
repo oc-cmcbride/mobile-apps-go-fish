@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "122988240473-aqdus7kim64n2j201hgkh701bsss79q1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.colinmcbride.go_fish_game",
+            "certificate_hash": "b1974a881c2909f438207566ceb53994c66deccd"
+          }
+        },
+        {
           "client_id": "122988240473-odpoi1msen1625csme8d77a62l16kii5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

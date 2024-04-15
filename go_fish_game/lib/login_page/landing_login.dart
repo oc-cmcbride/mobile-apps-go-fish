@@ -1,19 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_fish_game/accounts/create_account_page.dart';
 import 'package:go_fish_game/login_page/sign_in_page.dart';
 import 'package:go_fish_game/main_menu/main_menu_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+
 class LandingLogin extends StatelessWidget {
   const LandingLogin({Key? key});
 
-  Future<void> _handleGoogleSignIn(BuildContext context) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+  Future<UserCredential> signInWithGoogle(BuildContext context) async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    print(googleAuth?.accessToken);
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      //need to handle signing in and directing the user to the main application
+      //TODO - need to handle signing in and directing the user to the main application
       if (googleUser != null) {
         // TODO: Perform additional authentication steps or handle the signed-in user.
         // For example, you can pass the user data to another page and display user information.
@@ -29,6 +41,9 @@ class LandingLogin extends StatelessWidget {
       // Handle sign-in errors.
       // You can show an error message or perform any desired action.
     }
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -39,7 +54,7 @@ class LandingLogin extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-              onPressed: () => _handleGoogleSignIn(context),
+              onPressed: () => signInWithGoogle(context),
               child: const Text('Sign In with Google'),
             ),
             ElevatedButton(
