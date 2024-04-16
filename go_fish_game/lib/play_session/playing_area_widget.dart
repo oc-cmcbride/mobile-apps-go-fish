@@ -63,10 +63,17 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
     if (boardState != null) {
       final selectedCards = boardState!.currentPlayer.selectedCards;
       if (selectedCards.containsValue(true)) {
-        // Cards are selected; move them to the play area 
+        // Make sure to only move 2 matching cards to the playing area 
         final removedCards = Map<PlayingCard, bool>.fromEntries(selectedCards.entries.where((element) => element.value));
-        removedCards.keys.forEach(widget.area.acceptCard);
-        boardState!.currentPlayer.removeCards(removedCards.keys);
+        if (removedCards.length == 2 && removedCards.keys.first.value == removedCards.keys.last.value) {
+          // Cards are selected; move them to the play area 
+          removedCards.keys.forEach(widget.area.acceptCard);
+          boardState!.currentPlayer.removeCards(removedCards.keys);
+        }
+        else {
+          // Selected cards is not a pair of matching cards 
+          // print("Not a pair of matching cards; not moving to playing area");
+        }
       }
       else {
         // No cards are selected; discard cards from the area
