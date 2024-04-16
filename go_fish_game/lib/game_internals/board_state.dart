@@ -11,11 +11,11 @@ import 'playing_area.dart';
 class BoardState {
   final VoidCallback onWin;
 
-  final PlayingArea areaOne = PlayingArea();
+  late final PlayingArea areaOne = PlayingArea(playerOne);
 
-  final PlayingArea areaTwo = PlayingArea();
+  late final PlayingArea areaTwo = PlayingArea(playerTwo);
 
-  final PlayingArea areaDeck = PlayingArea();
+  final PlayingArea areaDeck = PlayingArea(null);
 
   final Player playerOne = Player();
 
@@ -49,7 +49,7 @@ class BoardState {
   }
 
   void _handlePlayerChange() {
-    if (currentPlayer.hand.isEmpty) {
+    if (currentPlayer.hand.isEmpty || areaDeck.cards.isEmpty) {
       onWin();
     }
   }
