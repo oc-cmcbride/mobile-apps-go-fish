@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 
 import 'playing_card.dart';
+import 'player.dart';
 
 class PlayingArea {
   /// The maximum number of cards in this playing area.
@@ -11,13 +12,15 @@ class PlayingArea {
   /// The current cards in this area.
   final List<PlayingCard> cards = [];
 
+  final Player? player;
+
   final StreamController<void> _playerChanges =
       StreamController<void>.broadcast();
 
   final StreamController<void> _remoteChanges =
       StreamController<void>.broadcast();
 
-  PlayingArea();
+  PlayingArea(this.player);
 
   /// A [Stream] that fires an event every time any change to this area is made.
   Stream<void> get allChanges =>

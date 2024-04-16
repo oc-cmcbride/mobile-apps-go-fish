@@ -60,7 +60,7 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
   }
 
   void _onAreaTap() {
-    if (boardState != null) {
+    if (boardState != null && boardState!.currentPlayer == widget.area.player) {
       final selectedCards = boardState!.currentPlayer.selectedCards;
       if (selectedCards.containsValue(true)) {
         // Make sure to only move 2 matching cards to the playing area 
