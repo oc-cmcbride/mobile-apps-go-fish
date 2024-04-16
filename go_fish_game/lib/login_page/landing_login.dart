@@ -17,7 +17,6 @@ class LandingLogin extends StatelessWidget {
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     // Create a new credential
-    print(googleAuth?.accessToken);
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -25,10 +24,8 @@ class LandingLogin extends StatelessWidget {
 
     try {
 
-      //TODO - need to handle signing in and directing the user to the main application
       if (googleUser != null) {
-        // TODO: Perform additional authentication steps or handle the signed-in user.
-        // For example, you can pass the user data to another page and display user information.
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MainMenuScreen()),
