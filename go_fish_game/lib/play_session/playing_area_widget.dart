@@ -76,8 +76,8 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
         }
       }
       else {
-        // No cards are selected; discard cards from the area
-        widget.area.removeFirstCard();
+        // No cards are selected; do nothing 
+        // widget.area.removeFirstCard();
       }
 
       final audioController = context.read<AudioController>();
