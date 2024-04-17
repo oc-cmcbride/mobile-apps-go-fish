@@ -9,6 +9,10 @@ import 'player.dart';
 import 'playing_area.dart';
 
 class BoardState {
+  static const int deckSize = 52;
+  
+  static const int startingHandSize = 7;
+
   final VoidCallback onWin;
 
   late final PlayingArea areaOne = PlayingArea(playerOne);
@@ -28,8 +32,17 @@ class BoardState {
     for (Player p in players) {
       p.addListener(_handlePlayerChange);
     }
-    for (int i = 0; i < 6; i++) {
+
+    // Add cards to deck 
+    for (int i = 0; i < deckSize; i++) {
       areaDeck.acceptCard(PlayingCard.random());
+    }
+
+    // Deal cards to players 
+    for (Player p in players) {
+      for (int i = 0; i < startingHandSize; i++) {
+        p.addCard(areaDeck.removeFirstCard()!);
+      }
     }
   }
 

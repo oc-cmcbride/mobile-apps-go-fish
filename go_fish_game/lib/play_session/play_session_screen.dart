@@ -80,23 +80,29 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                   // The actual UI of the game.
                   BoardWidget(),
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: MyButton(
-                      onPressed: () {
-                        setState(() {
-                          _boardState.nextPlayer();
-                        });
-                      },
-                      child: const Text('Swap players')
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: MyButton(
-                      onPressed: () => GoRouter.of(context).go('/'),
-                      child: const Text('Back'),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
+                          onPressed: () {
+                            setState(() {
+                              _boardState.nextPlayer();
+                            });
+                          },
+                          child: const Text('Swap players')
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
+                          onPressed: () => GoRouter.of(context).go('/'),
+                          child: const Text('Back'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

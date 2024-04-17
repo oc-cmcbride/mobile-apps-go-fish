@@ -7,10 +7,7 @@ class Player extends ChangeNotifier {
 
   // Technically this implementation doesn't allow for multiple cards of the 
   // same type, but that's not really a concern for us *shrug*
-  final Map<PlayingCard, bool> selectedCards = {
-    for (var card in List.generate(maxCards, (int i) => PlayingCard.random()))
-      card: false
-  };
+  final Map<PlayingCard, bool> selectedCards = { };
 
   List<PlayingCard> get hand => selectedCards.keys.toList();
 

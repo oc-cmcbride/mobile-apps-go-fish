@@ -7,7 +7,7 @@ import 'player.dart';
 
 class PlayingArea {
   /// The maximum number of cards in this playing area.
-  static const int maxCards = 6;
+  // static const int maxCards = 6;
 
   /// The current cards in this area.
   final List<PlayingCard> cards = [];
@@ -74,8 +74,6 @@ class PlayingArea {
   }
 
   void _maybeTrim() {
-    if (cards.length > maxCards) {
-      cards.removeRange(0, cards.length - maxCards);
-    }
+    // Add code if the play areas need to trim any cards
   }
 }

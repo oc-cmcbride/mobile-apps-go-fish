@@ -17,7 +17,7 @@ class _PlayerHandWidgetState extends State<PlayerHandWidget> {
   Widget build(BuildContext context) {
     final palette = context.watch<Palette>();
     final boardState = context.watch<BoardState>();
-    
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: ConstrainedBox(
@@ -33,20 +33,33 @@ class _PlayerHandWidgetState extends State<PlayerHandWidget> {
               runSpacing: 10,
               children: [
                 ...boardState.currentPlayer.hand.map(
-                  (card) => ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (boardState.currentPlayer.selectedCards[card] != null) {
-                          boardState.currentPlayer.selectedCards[card] = !boardState.currentPlayer.selectedCards[card]!;
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: (boardState.currentPlayer.selectedCards[card] ?? false) ? palette.accept : palette.trueWhite,
+                  (card) => Container(
+                    height: PlayingCardWidget.height,
+                    width: PlayingCardWidget.width,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (boardState.currentPlayer.selectedCards[card] != null) {
+                            boardState.currentPlayer.selectedCards[card] =
+                                !boardState.currentPlayer.selectedCards[card]!;
+                          }
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        elevation:
+                            (boardState.currentPlayer.selectedCards[card] ?? false)
+                                ? 10.0
+                                : 0.0,
+                        shadowColor: palette.accept,
+                        padding: EdgeInsets.zero,
                       ),
-                    child: PlayingCardWidget(
-                      card,
-                      player: boardState.currentPlayer,
+                      child: PlayingCardWidget(
+                        card,
+                        player: boardState.currentPlayer,
+                      ),
                     ),
                   ),
                 ),

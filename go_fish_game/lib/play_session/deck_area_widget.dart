@@ -14,9 +14,7 @@ import 'playing_card_widget.dart';
 class DeckAreaWidget extends StatefulWidget {
   final PlayingArea area;
 
-  final int deckStart = PlayingArea.maxCards;
-
-  DeckAreaWidget(this.area, {super.key});
+  const DeckAreaWidget(this.area, {super.key});
 
   @override
   State<DeckAreaWidget> createState() => _DeckAreaWidgetState();
