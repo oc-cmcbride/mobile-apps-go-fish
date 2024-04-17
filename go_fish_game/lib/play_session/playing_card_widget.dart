@@ -16,7 +16,9 @@ class PlayingCardWidget extends StatelessWidget {
 
   final Player? player;
 
-  const PlayingCardWidget(this.card, {this.player, super.key});
+  final bool isFaceDown;
+
+  const PlayingCardWidget(this.card, {this.player, this.isFaceDown=false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +26,27 @@ class PlayingCardWidget extends StatelessWidget {
     final textColor =
         card.suit.color == CardSuitColor.red ? palette.redPen : palette.ink;
 
+    final BoxDecoration cardDecoration = isFaceDown
+        ? BoxDecoration(
+          color: palette.darkPen,
+          border: Border.all(color: palette.ink),
+          borderRadius: BorderRadius.circular(5),
+        )
+        : BoxDecoration(
+          color: palette.trueWhite,
+          border: Border.all(color: palette.ink),
+          borderRadius: BorderRadius.circular(5),
+        );
+    final String cardText = isFaceDown ? "" : "${card.suit.asCharacter}\n${card.value}";
+
     final cardWidget = DefaultTextStyle(
       style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-          color: palette.trueWhite,
-          border: Border.all(color: palette.ink),
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: cardDecoration,
         child: Center(
-          child: Text('${card.suit.asCharacter}\n${card.value}',
+          child: Text(cardText,
               textAlign: TextAlign.center),
         ),
       ),

@@ -112,7 +112,7 @@ class _CardStack extends StatelessWidget {
               Positioned(
                 top: i * _topOffset,
                 left: i * _leftOffset,
-                child: PlayingCardWidget(cards[i]),
+                child: PlayingCardWidget(cards[i], isFaceDown: true),
               ),
           ],
         ),
