@@ -102,11 +102,11 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
 }
 
 class _CardStack extends StatelessWidget {
-  static const int _maxCards = 2;
+  static const int _maxCards = 50;
 
-  static const _leftOffset = 10.0;
+  static const _leftOffset = 3.0;
 
-  static const _topOffset = 5.0;
+  static const _topOffset = 0.0;
 
   static const double _maxWidth =
       _maxCards * _leftOffset + PlayingCardWidget.width;
@@ -127,7 +127,7 @@ class _CardStack extends StatelessWidget {
           children: [
             for (var i = max(0, cards.length - _maxCards);
                 i < cards.length;
-                i++)
+                i+=2)
               Positioned(
                 top: i * _topOffset,
                 left: i * _leftOffset,
