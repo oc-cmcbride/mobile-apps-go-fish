@@ -4,6 +4,8 @@
 
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_fish_game/controllers/auth_controller.dart';
+import 'package:go_fish_game/login_page/landing_login.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,6 +47,23 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     });
   }
 
+  Future<void> logOut(BuildContext context) async {
+    try {
+      if (AuthController().isGoogleSignIn) {
+        await AuthController().signOutGoogle();
+      } else {
+        AuthController().signOut();
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LandingLogin()),
+      );
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
@@ -57,12 +76,23 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
     return Scaffold(
       backgroundColor: palette.backgroundMain,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(45.0),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: FloatingActionButton.extended(
+            onPressed: () => logOut(context),
+            label: const Text('Sign Out'),
+            icon: const Icon(Icons.logout_rounded),
+          ),
+        ),
+      ),
       body: ResponsiveScreen(
         squarishMainArea: Center(
           child: Transform.rotate(
             angle: -0.1,
             child: const Text(
-              'Drag&Drop Cards!',
+              'Go Fish!',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Permanent Marker',

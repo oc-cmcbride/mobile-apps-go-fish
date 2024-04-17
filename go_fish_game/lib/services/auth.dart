@@ -5,6 +5,8 @@ class Auth {
 
   Stream<User?> get stream => _auth.authStateChanges().asBroadcastStream();
 
+  get currentUser => null;
+
   Future<String?> signInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
