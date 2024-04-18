@@ -130,7 +130,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                         padding: const EdgeInsets.all(4.0),
                         child: MyButton(
                           onPressed: () => GoRouter.of(context).go('/'),
-                          child: const Text('Back'),
+                          child: const Text('Quit'),
                         ),
                       ),
                     ],
