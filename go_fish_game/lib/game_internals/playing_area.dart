@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:async/async.dart';
 
 import 'playing_card.dart';
+import 'player.dart';
 
 class PlayingArea {
   /// The maximum number of cards in this playing area.
-  static const int maxCards = 6;
+  // static const int maxCards = 6;
 
   /// The current cards in this area.
   final List<PlayingCard> cards = [];
+
+  final Player? player;
 
   final StreamController<void> _playerChanges =
       StreamController<void>.broadcast();
@@ -17,7 +20,7 @@ class PlayingArea {
   final StreamController<void> _remoteChanges =
       StreamController<void>.broadcast();
 
-  PlayingArea();
+  PlayingArea(this.player);
 
   /// A [Stream] that fires an event every time any change to this area is made.
   Stream<void> get allChanges =>
@@ -44,10 +47,19 @@ class PlayingArea {
   }
 
   /// Removes the first card in the area, if any.
-  void removeFirstCard() {
-    if (cards.isEmpty) return;
-    cards.removeAt(0);
+  PlayingCard? removeFirstCard() {
+    if (cards.isEmpty) return null;
+    PlayingCard removedCard = cards.removeAt(0);
     _playerChanges.add(null);
+    return removedCard;
+  }
+
+  /// Removes the last card in the area, if any.
+  PlayingCard? removeLastCard() {
+    if (cards.isEmpty) return null;
+    PlayingCard removedCard = cards.removeLast();
+    _playerChanges.add(null);
+    return removedCard;
   }
 
   /// Replaces the cards in the area with [cards].
@@ -62,8 +74,6 @@ class PlayingArea {
   }
 
   void _maybeTrim() {
-    if (cards.length > maxCards) {
-      cards.removeRange(0, cards.length - maxCards);
-    }
+    // Add code if the play areas need to trim any cards
   }
 }

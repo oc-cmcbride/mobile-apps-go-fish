@@ -12,11 +12,11 @@ import '../style/palette.dart';
 import '../style/responsive_screen.dart';
 
 class WinGameScreen extends StatelessWidget {
-  final Score score;
+  final List<Score> scores;
 
   const WinGameScreen({
     super.key,
-    required this.score,
+    required this.scores,
   });
 
   @override
@@ -34,15 +34,16 @@ class WinGameScreen extends StatelessWidget {
             gap,
             const Center(
               child: Text(
-                'You won!',
+                'Game Over!',
                 style: TextStyle(fontFamily: 'Permanent Marker', fontSize: 50),
               ),
             ),
             gap,
             Center(
               child: Text(
-                'Score: ${score.score}\n'
-                'Time: ${score.formattedTime}',
+                'Player 1 Score: ${scores[0].score}\n'
+                'Player 2 Score: ${scores[1].score}\n'
+                'Time: ${scores[0].formattedTime}',
                 style: const TextStyle(
                     fontFamily: 'Permanent Marker', fontSize: 20),
               ),

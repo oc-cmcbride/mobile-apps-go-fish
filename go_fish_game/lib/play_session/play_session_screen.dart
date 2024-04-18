@@ -13,6 +13,7 @@ import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../game_internals/board_state.dart';
 import '../game_internals/score.dart';
+import '../game_internals/card_value.dart';
 import '../style/confetti.dart';
 import '../style/my_button.dart';
 import '../style/palette.dart';
@@ -67,27 +68,72 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkResponse(
-                      onTap: () => GoRouter.of(context).push('/settings'),
-                      child: Image.asset(
-                        'assets/images/settings.png',
-                        semanticLabel: 'Settings',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Current Player: ${_boardState.currentPlayer.number}",
+                        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      SizedBox(width: 30.0),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: InkResponse(
+                          onTap: () => GoRouter.of(context).push('/settings'),
+                          child: Image.asset(
+                            'assets/images/settings.png',
+                            semanticLabel: 'Settings',
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
                   // The actual UI of the game.
                   BoardWidget(),
-                  Text("Drag cards to the two areas above."),
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyButton(
-                      onPressed: () => GoRouter.of(context).go('/'),
-                      child: const Text('Back'),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
+                            onPressed: () {
+                              setState(() {
+                                _boardState.nextPlayer();
+                              });
+                            },
+                            child: const Text('Swap players')),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
+                          onPressed: () async {
+                            final result =
+                                await _cardSwapDialogBuilder(context);
+                            if (result != null) {
+                              final fromPlayer = (_boardState.currentPlayer ==
+                                      _boardState.playerOne)
+                                  ? _boardState.playerTwo
+                                  : _boardState.playerOne;
+                              final removedCards =
+                                  _boardState.askForCards(fromPlayer, result);
+                              if (context.mounted) {
+                                _cardSwapResultDialogBuilder(context, removedCards.length);
+                              }
+                            }
+                          },
+                          child: const Text('Ask'),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
+                          onPressed: () => GoRouter.of(context).go('/'),
+                          child: const Text('Back'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -124,8 +170,8 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   Future<void> _playerWon() async {
     _log.info('Player won');
 
-    // TODO: replace with some meaningful score for the card game
-    final score = Score(1, 1, DateTime.now().difference(_startOfPlay));
+    final duration = DateTime.now().difference(_startOfPlay);
+    final scores = List.generate(_boardState.areas.length, (int i) => Score(_boardState.areas[i].cards.length, duration));
 
     // final playerProgress = context.read<PlayerProgress>();
     // playerProgress.setLevelReached(widget.level.number);
@@ -145,6 +191,68 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     await Future<void>.delayed(_celebrationDuration);
     if (!mounted) return;
 
-    GoRouter.of(context).go('/play/won', extra: {'score': score});
+    GoRouter.of(context).go('/play/won', extra: {'score': scores});
+  }
+
+  Future<CardValue?> _cardSwapDialogBuilder(BuildContext context) {
+    final palette = Provider.of<Palette>(context, listen: false);
+
+    return showDialog<CardValue?>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Ask for a card"),
+          content: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                ...CardValue.values.map(
+                  (value) => TextButton(
+                    child: Text(value.asCharacter),
+                    onPressed: () {
+                      Navigator.of(context).pop(value);
+                    },
+                  ),
+                ),
+              ]),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.trueWhite,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _cardSwapResultDialogBuilder(BuildContext context, int numCards) {
+    final palette = Provider.of<Palette>(context, listen: false);
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text((numCards == 0) ? "Nope, go fish!" : "Got $numCards card(s)"),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.trueWhite,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Ok"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

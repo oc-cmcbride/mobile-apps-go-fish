@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../audio/audio_controller.dart';
-import '../audio/sounds.dart';
 import '../game_internals/card_suit.dart';
 import '../game_internals/player.dart';
 import '../game_internals/playing_card.dart';
@@ -18,7 +16,9 @@ class PlayingCardWidget extends StatelessWidget {
 
   final Player? player;
 
-  const PlayingCardWidget(this.card, {this.player, super.key});
+  final bool isFaceDown;
+
+  const PlayingCardWidget(this.card, {this.player, this.isFaceDown=false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +26,39 @@ class PlayingCardWidget extends StatelessWidget {
     final textColor =
         card.suit.color == CardSuitColor.red ? palette.redPen : palette.ink;
 
+    final BoxDecoration cardDecoration = isFaceDown
+        ? BoxDecoration(
+          color: palette.darkPen,
+          border: Border.all(color: palette.ink),
+          borderRadius: BorderRadius.circular(5),
+        )
+        : BoxDecoration(
+          color: palette.trueWhite,
+          border: Border.all(color: palette.ink),
+          borderRadius: BorderRadius.circular(5),
+        );
+    final String cardText = isFaceDown ? "" : "${card.suit.asCharacter}\n${card.value}";
+
     final cardWidget = DefaultTextStyle(
       style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor),
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-          color: palette.trueWhite,
-          border: Border.all(color: palette.ink),
-          borderRadius: BorderRadius.circular(5),
-        ),
+        decoration: cardDecoration,
         child: Center(
-          child: Text('${card.suit.asCharacter}\n${card.value}',
+          child: Text(cardText,
               textAlign: TextAlign.center),
         ),
       ),
     );
 
+    return cardWidget;
+
+    /*
     /// Cards that aren't in a player's hand are not draggable.
     if (player == null) return cardWidget;
 
+    
     return Draggable(
       feedback: Transform.rotate(
         angle: 0.1,
@@ -66,6 +79,7 @@ class PlayingCardWidget extends StatelessWidget {
       },
       child: cardWidget,
     );
+    */
   }
 }
 
