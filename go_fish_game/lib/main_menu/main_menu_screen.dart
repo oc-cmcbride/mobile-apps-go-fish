@@ -2,9 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
@@ -13,14 +15,45 @@ import '../style/my_button.dart';
 import '../style/palette.dart';
 import '../style/responsive_screen.dart';
 
-class MainMenuScreen extends StatelessWidget {
-  const MainMenuScreen({super.key});
+class MainMenuScreen extends StatefulWidget {
+  const MainMenuScreen({Key? key}) : super(key: key);
+
+  @override
+  _MainMenuScreenState createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Show the welcome message when the screen is opened
+    showWelcomeMessage();
+  }
+
+  void showWelcomeMessage() {
+    final user = FirebaseAuth.instance.currentUser;
+    final displayName = user?.displayName ?? 'Guest';
+
+    // Show a snackbar with the welcome message
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Welcome, $displayName!'),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    //need to create a field somewhere on the screen that "shows" the user's profile
     final palette = context.watch<Palette>();
     final settingsController = context.watch<SettingsController>();
     final audioController = context.watch<AudioController>();
+    // Example: Displaying the user's display name
+    final String displayName = user?.displayName ?? 'Guest';
 
     return Scaffold(
       backgroundColor: palette.backgroundMain,

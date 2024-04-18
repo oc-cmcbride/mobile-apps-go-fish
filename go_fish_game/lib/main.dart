@@ -16,6 +16,8 @@ import 'player_progress/player_progress.dart';
 import 'router.dart';
 import 'settings/settings.dart';
 import 'style/palette.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   // Basic logging setup.
@@ -30,6 +32,7 @@ void main() async {
   });
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   // Put game into full screen mode on mobile devices.
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   // Lock the game to portrait mode on mobile devices.
@@ -38,6 +41,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  // ignore: prefer_const_constructors
   runApp(MyApp());
 }
 
@@ -89,7 +93,7 @@ class MyApp extends StatelessWidget {
               // Make buttons more fun.
               filledButtonTheme: FilledButtonThemeData(
                 style: FilledButton.styleFrom(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
