@@ -46,13 +46,13 @@ final router = GoRouter(
               },
               pageBuilder: (context, state) {
                 final map = state.extra! as Map<String, dynamic>;
-                final score = map['score'] as Score;
+                final scores = map['score'] as List<Score>;
 
                 return buildMyTransition<void>(
                   key: ValueKey('won'),
                   color: context.watch<Palette>().backgroundPlaySession,
                   child: WinGameScreen(
-                    score: score,
+                    scores: scores,
                     key: const Key('win game'),
                   ),
                 );

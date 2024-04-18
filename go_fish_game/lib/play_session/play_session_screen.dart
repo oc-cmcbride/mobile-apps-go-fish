@@ -160,8 +160,8 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
   Future<void> _playerWon() async {
     _log.info('Player won');
 
-    // TODO: replace with some meaningful score for the card game
-    final score = Score(1, 1, DateTime.now().difference(_startOfPlay));
+    final duration = DateTime.now().difference(_startOfPlay);
+    final scores = List.generate(_boardState.areas.length, (int i) => Score(_boardState.areas[i].cards.length, duration));
 
     // final playerProgress = context.read<PlayerProgress>();
     // playerProgress.setLevelReached(widget.level.number);
@@ -181,7 +181,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     await Future<void>.delayed(_celebrationDuration);
     if (!mounted) return;
 
-    GoRouter.of(context).go('/play/won', extra: {'score': score});
+    GoRouter.of(context).go('/play/won', extra: {'score': scores});
   }
 
   Future<CardValue?> _cardSwapDialogBuilder(BuildContext context) {
