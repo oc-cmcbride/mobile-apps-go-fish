@@ -4,6 +4,9 @@ import 'package:go_fish_game/accounts/create_account_page.dart';
 import 'package:go_fish_game/login_page/sign_in_page.dart';
 import 'package:go_fish_game/main_menu/main_menu_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import '../style/palette.dart';
+
 
 
 class LandingLogin extends StatelessWidget {
@@ -45,34 +48,48 @@ class LandingLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.watch<Palette>();
     return Scaffold(
+      backgroundColor: palette.backgroundMain,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16.0),
+              child: Text(
+                'Go Fish!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Permanent Marker',
+                  fontSize: 55,
+                  height: 1,
+                ),
+              ),
+            ),
             ElevatedButton(
               onPressed: () => signInWithGoogle(context),
               child: const Text('Sign In with Google'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CreateAccountPage()),
-                );
-              },
-              child: const Text('Create Account'),
-            ),
-            //might change this to have the two fields here
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignInPage()),
-                );
-              },
-              child: const Text('Sign In'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+            //     );
+            //   },
+            //   child: const Text('Create Account'),
+            // ),
+            // //might change this to have the two fields here
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => const SignInPage()),
+            //     );
+            //   },
+            //   child: const Text('Sign In'),
+            // ),
           ],
         ),
       ),

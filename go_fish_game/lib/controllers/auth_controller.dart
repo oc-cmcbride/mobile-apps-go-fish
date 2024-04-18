@@ -1,3 +1,4 @@
+import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auth.dart';
 
 class AuthController {
@@ -7,6 +8,7 @@ class AuthController {
 
   static final AuthController _singleton = AuthController._internal();
   final _auth = Auth();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<String?> createAccount(
       {required String email, required String password}) {
@@ -19,6 +21,29 @@ class AuthController {
   }
 
   void signOut() => _auth.signOut();
+
+  bool get isGoogleSignIn {
+    final user = _auth.currentUser;
+    if (user != null) {
+      for (final provider in user.providerData) {
+        if (provider.providerId == 'google.com') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Future<void> signOutGoogle() async {
+    try {
+      await _googleSignIn.disconnect();
+      await _googleSignIn.signOut();
+      _auth.signOut();
+      // Additional sign-out logic for Google sign-in
+    } catch (e) {
+      // Handle error
+    }
+  }
 
   String? get userId => _auth.userId;
 
