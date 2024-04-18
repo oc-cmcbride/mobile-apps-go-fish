@@ -13,6 +13,7 @@ import '../audio/audio_controller.dart';
 import '../audio/sounds.dart';
 import '../game_internals/board_state.dart';
 import '../game_internals/score.dart';
+import '../game_internals/card_value.dart';
 import '../style/confetti.dart';
 import '../style/my_button.dart';
 import '../style/palette.dart';
@@ -87,12 +88,22 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: MyButton(
+                            onPressed: () {
+                              setState(() {
+                                _boardState.nextPlayer();
+                              });
+                            },
+                            child: const Text('Swap players')),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: MyButton(
                           onPressed: () {
-                            setState(() {
-                              _boardState.nextPlayer();
-                            });
+                            // TODO: Actually do something with the modal result
+                            final result = _cardSwapDialogBuilder(context);
+                            result.then((value) => print(value?.name ?? "No card selected"),);
                           },
-                          child: const Text('Swap players')
+                          child: const Text('Ask'),
                         ),
                       ),
                       Padding(
@@ -161,5 +172,42 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     if (!mounted) return;
 
     GoRouter.of(context).go('/play/won', extra: {'score': score});
+  }
+
+  Future<CardValue?> _cardSwapDialogBuilder(BuildContext context) {
+    final palette = Provider.of<Palette>(context, listen: false);
+
+    return showDialog<CardValue?>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Ask for a card"),
+            content: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  ...CardValue.values.map(
+                    (value) => TextButton(
+                      child: Text(value.asCharacter),
+                      onPressed: () {
+                        Navigator.of(context).pop(value);
+                      },
+                    ),
+                  ),
+                ]),
+            actions: <Widget>[
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: palette.trueWhite,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancel"),
+              ),
+            ],
+          );
+        });
   }
 }
