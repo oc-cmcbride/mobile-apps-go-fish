@@ -21,7 +21,6 @@ class PlayingAreaWidget extends StatefulWidget {
 }
 
 class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
-
   bool isHighlighted = false;
 
   BoardState? boardState;
@@ -31,31 +30,42 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
     final palette = context.watch<Palette>();
     boardState = context.watch<BoardState>();
 
-    return LimitedBox(
-      maxHeight: 120,
-      child: AspectRatio(
-        aspectRatio: 2 / 1,
-        child: DragTarget<PlayingCardDragData>(
-          builder: (context, candidateData, rejectedData) => Material(
-            color: isHighlighted ? palette.accept : palette.trueWhite,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              splashColor: palette.redPen,
-              onTap: _onAreaTap,
-              child: StreamBuilder(
-                // Rebuild the card stack whenever the area changes
-                // (either by a player action, or remotely).
-                stream: widget.area.allChanges,
-                builder: (context, child) => _CardStack(widget.area.cards),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "${widget.area.player!.number}",
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(width: 5.0),
+        LimitedBox(
+          maxHeight: 120,
+          child: AspectRatio(
+            aspectRatio: 2 / 1,
+            child: DragTarget<PlayingCardDragData>(
+              builder: (context, candidateData, rejectedData) => Material(
+                color: isHighlighted ? palette.accept : palette.trueWhite,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  splashColor: palette.redPen,
+                  onTap: _onAreaTap,
+                  child: StreamBuilder(
+                    // Rebuild the card stack whenever the area changes
+                    // (either by a player action, or remotely).
+                    stream: widget.area.allChanges,
+                    builder: (context, child) => _CardStack(widget.area.cards),
+                  ),
+                ),
               ),
+              onWillAcceptWithDetails: _onDragWillAccept,
+              onLeave: _onDragLeave,
+              onAcceptWithDetails: _onDragAccept,
             ),
           ),
-          onWillAcceptWithDetails: _onDragWillAccept,
-          onLeave: _onDragLeave,
-          onAcceptWithDetails: _onDragAccept,
         ),
-      ),
+      ],
     );
   }
 
@@ -63,20 +73,20 @@ class _PlayingAreaWidgetState extends State<PlayingAreaWidget> {
     if (boardState != null && boardState!.currentPlayer == widget.area.player) {
       final selectedCards = boardState!.currentPlayer.selectedCards;
       if (selectedCards.containsValue(true)) {
-        // Make sure to only move 2 matching cards to the playing area 
-        final removedCards = Map<PlayingCard, bool>.fromEntries(selectedCards.entries.where((element) => element.value));
-        if (removedCards.length == 2 && removedCards.keys.first.value == removedCards.keys.last.value) {
-          // Cards are selected; move them to the play area 
+        // Make sure to only move 2 matching cards to the playing area
+        final removedCards = Map<PlayingCard, bool>.fromEntries(
+            selectedCards.entries.where((element) => element.value));
+        if (removedCards.length == 2 &&
+            removedCards.keys.first.value == removedCards.keys.last.value) {
+          // Cards are selected; move them to the play area
           removedCards.keys.forEach(widget.area.acceptCard);
           boardState!.currentPlayer.removeCards(removedCards.keys);
-        }
-        else {
-          // Selected cards is not a pair of matching cards 
+        } else {
+          // Selected cards is not a pair of matching cards
           // print("Not a pair of matching cards; not moving to playing area");
         }
-      }
-      else {
-        // No cards are selected; do nothing 
+      } else {
+        // No cards are selected; do nothing
         // widget.area.removeFirstCard();
       }
 
@@ -127,7 +137,7 @@ class _CardStack extends StatelessWidget {
           children: [
             for (var i = max(0, cards.length - _maxCards);
                 i < cards.length;
-                i+=2)
+                i += 2)
               Positioned(
                 top: i * _topOffset,
                 left: i * _leftOffset,

@@ -22,9 +22,9 @@ class BoardState {
 
   final PlayingArea areaDeck = PlayingArea(null);
 
-  final Player playerOne = Player();
+  final Player playerOne = Player(1);
 
-  final Player playerTwo = Player();
+  final Player playerTwo = Player(2);
 
   late List<Player> players;
 

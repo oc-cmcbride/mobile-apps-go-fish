@@ -28,25 +28,15 @@ class _BoardWidgetState extends State<BoardWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.all(10),
-        //   child: Row(
-        //     children: [
-        //       Expanded(child: PlayingAreaWidget(boardState.areaOne)),
-        //       SizedBox(width: 20),
-        //       Expanded(child: PlayingAreaWidget(boardState.areaTwo)),
-        //     ],
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              PlayingAreaWidget(boardState.areaTwo),
+              PlayingAreaWidget(boardState.areaOne),
               SizedBox(height: 10),
               DeckAreaWidget(boardState.areaDeck),
               SizedBox(height: 10),
-              PlayingAreaWidget(boardState.areaOne),
+              PlayingAreaWidget(boardState.areaTwo),
             ],
           ),
         ),
