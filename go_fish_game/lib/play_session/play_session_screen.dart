@@ -239,7 +239,7 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Got $numCards card(s)"),
+          title: Text((numCards == 0) ? "Nope, go fish!" : "Got $numCards card(s)"),
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
