@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:go_fish_game/game_internals/playing_card.dart';
+import '../game_internals/card_value.dart';
 
 import 'player.dart';
 import 'playing_area.dart';
@@ -59,6 +60,18 @@ class BoardState {
 
   void nextPlayer() {
     players = players.sublist(1)..add(players.first);
+  }
+
+  // Asks for cards from the `fromPlayer` and adds those cards to the current 
+  // player's hand. This function returns the cards added to the current 
+  // player's hand. 
+  List<PlayingCard> askForCards(Player fromPlayer, CardValue value) {
+    List<PlayingCard> takenCards = fromPlayer.hand.where((card) => card.value == value).toList();
+    if (takenCards.isNotEmpty) {
+      fromPlayer.removeCards(takenCards);
+      currentPlayer.addCards(takenCards);
+    }
+    return takenCards;
   }
 
   void _handlePlayerChange() {

@@ -98,10 +98,20 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: MyButton(
-                          onPressed: () {
-                            // TODO: Actually do something with the modal result
-                            final result = _cardSwapDialogBuilder(context);
-                            result.then((value) => print(value?.name ?? "No card selected"),);
+                          onPressed: () async {
+                            final result =
+                                await _cardSwapDialogBuilder(context);
+                            if (result != null) {
+                              final fromPlayer = (_boardState.currentPlayer ==
+                                      _boardState.playerOne)
+                                  ? _boardState.playerTwo
+                                  : _boardState.playerOne;
+                              final removedCards =
+                                  _boardState.askForCards(fromPlayer, result);
+                              if (context.mounted) {
+                                _cardSwapResultDialogBuilder(context, removedCards.length);
+                              }
+                            }
                           },
                           child: const Text('Ask'),
                         ),
@@ -178,36 +188,61 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
     final palette = Provider.of<Palette>(context, listen: false);
 
     return showDialog<CardValue?>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Ask for a card"),
-            content: Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  ...CardValue.values.map(
-                    (value) => TextButton(
-                      child: Text(value.asCharacter),
-                      onPressed: () {
-                        Navigator.of(context).pop(value);
-                      },
-                    ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Ask for a card"),
+          content: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                ...CardValue.values.map(
+                  (value) => TextButton(
+                    child: Text(value.asCharacter),
+                    onPressed: () {
+                      Navigator.of(context).pop(value);
+                    },
                   ),
-                ]),
-            actions: <Widget>[
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: palette.trueWhite,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Cancel"),
+              ]),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.trueWhite,
               ),
-            ],
-          );
-        });
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _cardSwapResultDialogBuilder(BuildContext context, int numCards) {
+    final palette = Provider.of<Palette>(context, listen: false);
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Got $numCards card(s)"),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: palette.trueWhite,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Ok"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
